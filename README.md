@@ -1,37 +1,70 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Figma Clone
+
+Figma Clone is a web application that allows users to collaborate in real-time on a design canvas, similar to Figma. This project aims to provide a platform for users to work together on design projects, share feedback, and collaborate in real-time.
+
+## Features
+
+- Real-time collaboration
+- Design canvas for creating and editing designs
+- Comments and reactions for feedback
+- Support for various design elements and tools
+
+## Technologies
+
+- **Next.js**: For building the web application.
+- **React**: For building the user interface components.
+- **Tailwind CSS**: For styling the components with utility-first CSS classes.
+- **Liveblocks**: For real-time collaboration features.
+- **Fabric.js**: For handling the canvas and design elements.
+- **UUID**: For generating unique identifiers.
+
+## Dependencies
+
+This project relies on several key libraries and tools:
+
+- **Next.js**: A React framework for building web applications.
+- **React**: A JavaScript library for building user interfaces.
+- **Tailwind CSS**: A utility-first CSS framework for rapidly building custom designs.
+- **Liveblocks**: A real-time collaboration platform.
+- **Fabric.js**: A powerful and flexible open-source JavaScript HTML5 canvas library.
+- **UUID**: A library for generating unique identifiers.
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
+- Node.js (version 14 or higher)
+- npm (version 6 or higher)
+
+### Installation
+
+1. Clone the repository:
+2. git clone https://github.com/yourusername/figma_clone.git
+
+2. Navigate to the project directory:
+cd figma_clone
+
+3. Install the dependencies:
+npm install
+
+4. Start the development server:
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Usage
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+After starting the development server, open your browser and navigate to `http://localhost:3000` to start using the application.
 
-## Learn More
+## Contributing
 
-To learn more about Next.js, take a look at the following resources:
+Contributions are welcome! Please read the [contributing guidelines](CONTRIBUTING.md) before getting started.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## License
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Deploy on Vercel
+## Acknowledgments
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-# figma_clone liveblocks implemented
+- [Figma](https://www.figma.com/) for inspiration.
+- [Liveblocks](https://liveblocks.io/) for real-time collaboration features.
+- [Fabric.js](http://fabricjs.com/) for canvas and design elements handling.
