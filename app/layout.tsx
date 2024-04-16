@@ -7,23 +7,25 @@ const workSans = Work_Sans({
   subsets: ["latin"],
   // ? we are activating the font using this key
   variable: "--font-work-sans",
-  weight: ["400", "600", "700"],
+  weight: ["400", "600", "700"]
 });
 
 export const metadata: Metadata = {
   title: "Create Next App",
   description:
-    "Figma clone using fabric js and Liveblocks for realtime collaboration",
+    "Figma clone using fabric js and Liveblocks for realtime collaboration"
 };
 
 export default function RootLayout({
-  children,
+  children
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
     <html lang="en">
-      <body className={`${workSans.className} bg-primary-grey-200`}>
+      <body
+        className={`${workSans.className} bg-primary-grey-200`}
+      >
         <Room>{children}</Room>
       </body>
     </html>

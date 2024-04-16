@@ -9,7 +9,7 @@ import {
   CanvasObjectScaling,
   CanvasPathCreated,
   CanvasSelectionCreated,
-  RenderCanvas,
+  RenderCanvas
 } from "@/types/type";
 import { defaultNavElement } from "@/constants";
 import { createSpecificShape } from "./shapes";
@@ -17,19 +17,23 @@ import { createSpecificShape } from "./shapes";
 // initialize fabric canvas
 export const initializeFabric = ({
   fabricRef,
-  canvasRef,
+  canvasRef
 }: {
   fabricRef: React.MutableRefObject<fabric.Canvas | null>;
   canvasRef: React.MutableRefObject<HTMLCanvasElement | null>;
 }) => {
   // get canvas element
-  const canvasElement = document.getElementById("canvas");
+  const canvasElement =
+    document.getElementById("canvas");
 
   // create fabric canvas
-  const canvas = new fabric.Canvas(canvasRef.current, {
-    width: canvasElement?.clientWidth,
-    height: canvasElement?.clientHeight,
-  });
+  const canvas = new fabric.Canvas(
+    canvasRef.current,
+    {
+      width: canvasElement?.clientWidth,
+      height: canvasElement?.clientHeight
+    }
+  );
 
   // set canvas reference to fabricRef so we can use it later anywhere outside canvas listener
   fabricRef.current = canvas;
@@ -43,7 +47,7 @@ export const handleCanvasMouseDown = ({
   canvas,
   selectedShapeRef,
   isDrawing,
-  shapeRef,
+  shapeRef
 }: CanvasMouseDown) => {
   // get pointer coordinates
   const pointer = canvas.getPointer(options.e);
@@ -54,7 +58,10 @@ export const handleCanvasMouseDown = ({
    *
    * findTarget: http://fabricjs.com/docs/fabric.Canvas.html#findTarget
    */
-  const target = canvas.findTarget(options.e, false);
+  const target = canvas.findTarget(
+    options.e,
+    false
+  );
 
   // set canvas drawing mode to false
   canvas.isDrawingMode = false;
@@ -91,7 +98,7 @@ export const handleCanvasMouseDown = ({
     // create custom fabric object/shape and set it to shapeRef
     shapeRef.current = createSpecificShape(
       selectedShapeRef.current,
-      pointer as any,
+      pointer as any
     );
 
     // if shapeRef is not null, add it to canvas
@@ -109,11 +116,12 @@ export const handleCanvaseMouseMove = ({
   isDrawing,
   selectedShapeRef,
   shapeRef,
-  syncShapeInStorage,
+  syncShapeInStorage
 }: CanvasMouseMove) => {
   // if selected shape is freeform, return
   if (!isDrawing.current) return;
-  if (selectedShapeRef.current === "freeform") return;
+  if (selectedShapeRef.current === "freeform")
+    return;
 
   canvas.isDrawingMode = false;
 
@@ -125,35 +133,48 @@ export const handleCanvaseMouseMove = ({
   switch (selectedShapeRef?.current) {
     case "rectangle":
       shapeRef.current?.set({
-        width: pointer.x - (shapeRef.current?.left || 0),
-        height: pointer.y - (shapeRef.current?.top || 0),
+        width:
+          pointer.x -
+          (shapeRef.current?.left || 0),
+        height:
+          pointer.y - (shapeRef.current?.top || 0)
       });
       break;
 
     case "circle":
       shapeRef.current.set({
-        radius: Math.abs(pointer.x - (shapeRef.current?.left || 0)) / 2,
+        radius:
+          Math.abs(
+            pointer.x -
+              (shapeRef.current?.left || 0)
+          ) / 2
       });
       break;
 
     case "triangle":
       shapeRef.current?.set({
-        width: pointer.x - (shapeRef.current?.left || 0),
-        height: pointer.y - (shapeRef.current?.top || 0),
+        width:
+          pointer.x -
+          (shapeRef.current?.left || 0),
+        height:
+          pointer.y - (shapeRef.current?.top || 0)
       });
       break;
 
     case "line":
       shapeRef.current?.set({
         x2: pointer.x,
-        y2: pointer.y,
+        y2: pointer.y
       });
       break;
 
     case "image":
       shapeRef.current?.set({
-        width: pointer.x - (shapeRef.current?.left || 0),
-        height: pointer.y - (shapeRef.current?.top || 0),
+        width:
+          pointer.x -
+          (shapeRef.current?.left || 0),
+        height:
+          pointer.y - (shapeRef.current?.top || 0)
       });
 
     default:
@@ -178,10 +199,11 @@ export const handleCanvasMouseUp = ({
   activeObjectRef,
   selectedShapeRef,
   syncShapeInStorage,
-  setActiveElement,
+  setActiveElement
 }: CanvasMouseUp) => {
   isDrawing.current = false;
-  if (selectedShapeRef.current === "freeform") return;
+  if (selectedShapeRef.current === "freeform")
+    return;
 
   // sync shape in storage as drawing is stopped
   syncShapeInStorage(shapeRef.current);
@@ -202,7 +224,7 @@ export const handleCanvasMouseUp = ({
 // update shape in storage when object is modified
 export const handleCanvasObjectModified = ({
   options,
-  syncShapeInStorage,
+  syncShapeInStorage
 }: CanvasObjectModified) => {
   const target = options.target;
   if (!target) return;
@@ -217,7 +239,7 @@ export const handleCanvasObjectModified = ({
 // update shape in storage when path is created when in freeform mode
 export const handlePathCreated = ({
   options,
-  syncShapeInStorage,
+  syncShapeInStorage
 }: CanvasPathCreated) => {
   // get path object
   const path = options.path;
@@ -225,7 +247,7 @@ export const handlePathCreated = ({
 
   // set unique id to path object
   path.set({
-    objectId: uuid4(),
+    objectId: uuid4()
   });
 
   // sync shape in storage
@@ -234,7 +256,7 @@ export const handlePathCreated = ({
 
 // check how object is moving on canvas and restrict it to canvas boundaries
 export const handleCanvasObjectMoving = ({
-  options,
+  options
 }: {
   options: fabric.IEvent;
 }) => {
@@ -253,8 +275,11 @@ export const handleCanvasObjectMoving = ({
       0,
       Math.min(
         target.left,
-        (canvas.width || 0) - (target.getScaledWidth() || target.width || 0),
-      ),
+        (canvas.width || 0) -
+          (target.getScaledWidth() ||
+            target.width ||
+            0)
+      )
     );
   }
 
@@ -264,8 +289,11 @@ export const handleCanvasObjectMoving = ({
       0,
       Math.min(
         target.top,
-        (canvas.height || 0) - (target.getScaledHeight() || target.height || 0),
-      ),
+        (canvas.height || 0) -
+          (target.getScaledHeight() ||
+            target.height ||
+            0)
+      )
     );
   }
 };
@@ -274,7 +302,7 @@ export const handleCanvasObjectMoving = ({
 export const handleCanvasSelectionCreated = ({
   options,
   isEditingRef,
-  setElementAttributes,
+  setElementAttributes
 }: CanvasSelectionCreated) => {
   // if user is editing manually, return
   if (isEditingRef.current) return;
@@ -283,30 +311,41 @@ export const handleCanvasSelectionCreated = ({
   if (!options?.selected) return;
 
   // get the selected element
-  const selectedElement = options?.selected[0] as fabric.Object;
+  const selectedElement = options
+    ?.selected[0] as fabric.Object;
 
   // if only one element is selected, set element attributes
-  if (selectedElement && options.selected.length === 1) {
+  if (
+    selectedElement &&
+    options.selected.length === 1
+  ) {
     // calculate scaled dimensions of the object
     const scaledWidth = selectedElement?.scaleX
-      ? selectedElement?.width! * selectedElement?.scaleX
+      ? selectedElement?.width! *
+        selectedElement?.scaleX
       : selectedElement?.width;
 
     const scaledHeight = selectedElement?.scaleY
-      ? selectedElement?.height! * selectedElement?.scaleY
+      ? selectedElement?.height! *
+        selectedElement?.scaleY
       : selectedElement?.height;
 
     setElementAttributes({
-      width: scaledWidth?.toFixed(0).toString() || "",
-      height: scaledHeight?.toFixed(0).toString() || "",
-      fill: selectedElement?.fill?.toString() || "",
+      width:
+        scaledWidth?.toFixed(0).toString() || "",
+      height:
+        scaledHeight?.toFixed(0).toString() || "",
+      fill:
+        selectedElement?.fill?.toString() || "",
       stroke: selectedElement?.stroke || "",
       // @ts-ignore
       fontSize: selectedElement?.fontSize || "",
       // @ts-ignore
-      fontFamily: selectedElement?.fontFamily || "",
+      fontFamily:
+        selectedElement?.fontFamily || "",
       // @ts-ignore
-      fontWeight: selectedElement?.fontWeight || "",
+      fontWeight:
+        selectedElement?.fontWeight || ""
     });
   }
 };
@@ -314,23 +353,27 @@ export const handleCanvasSelectionCreated = ({
 // update element attributes when element is scaled
 export const handleCanvasObjectScaling = ({
   options,
-  setElementAttributes,
+  setElementAttributes
 }: CanvasObjectScaling) => {
   const selectedElement = options.target;
 
   // calculate scaled dimensions of the object
   const scaledWidth = selectedElement?.scaleX
-    ? selectedElement?.width! * selectedElement?.scaleX
+    ? selectedElement?.width! *
+      selectedElement?.scaleX
     : selectedElement?.width;
 
   const scaledHeight = selectedElement?.scaleY
-    ? selectedElement?.height! * selectedElement?.scaleY
+    ? selectedElement?.height! *
+      selectedElement?.scaleY
     : selectedElement?.height;
 
   setElementAttributes((prev) => ({
     ...prev,
-    width: scaledWidth?.toFixed(0).toString() || "",
-    height: scaledHeight?.toFixed(0).toString() || "",
+    width:
+      scaledWidth?.toFixed(0).toString() || "",
+    height:
+      scaledHeight?.toFixed(0).toString() || ""
   }));
 };
 
@@ -338,66 +381,83 @@ export const handleCanvasObjectScaling = ({
 export const renderCanvas = ({
   fabricRef,
   canvasObjects,
-  activeObjectRef,
+  activeObjectRef
 }: RenderCanvas) => {
   // clear canvas
   fabricRef.current?.clear();
 
   // render all objects on canvas
-  Array.from(canvasObjects, ([objectId, objectData]) => {
-    /**
-     * enlivenObjects() is used to render objects on canvas.
-     * It takes two arguments:
-     * 1. objectData: object data to render on canvas
-     * 2. callback: callback function to execute after rendering objects
-     * on canvas
-     *
-     * enlivenObjects: http://fabricjs.com/docs/fabric.util.html#.enlivenObjectEnlivables
-     */
-    fabric.util.enlivenObjects(
-      [objectData],
-      (enlivenedObjects: fabric.Object[]) => {
-        enlivenedObjects.forEach((enlivenedObj) => {
-          // if element is active, keep it in active state so that it can be edited further
-          if (activeObjectRef.current?.objectId === objectId) {
-            fabricRef.current?.setActiveObject(enlivenedObj);
-          }
-
-          // add object to canvas
-          fabricRef.current?.add(enlivenedObj);
-        });
-      },
+  Array.from(
+    canvasObjects,
+    ([objectId, objectData]) => {
       /**
-       * specify namespace of the object for fabric to render it on canvas
-       * A namespace is a string that is used to identify the type of
-       * object.
+       * enlivenObjects() is used to render objects on canvas.
+       * It takes two arguments:
+       * 1. objectData: object data to render on canvas
+       * 2. callback: callback function to execute after rendering objects
+       * on canvas
        *
-       * Fabric Namespace: http://fabricjs.com/docs/fabric.html
+       * enlivenObjects: http://fabricjs.com/docs/fabric.util.html#.enlivenObjectEnlivables
        */
-      "fabric",
-    );
-  });
+      fabric.util.enlivenObjects(
+        [objectData],
+        (enlivenedObjects: fabric.Object[]) => {
+          enlivenedObjects.forEach(
+            (enlivenedObj) => {
+              // if element is active, keep it in active state so that it can be edited further
+              if (
+                activeObjectRef.current
+                  ?.objectId === objectId
+              ) {
+                fabricRef.current?.setActiveObject(
+                  enlivenedObj
+                );
+              }
+
+              // add object to canvas
+              fabricRef.current?.add(
+                enlivenedObj
+              );
+            }
+          );
+        },
+        /**
+         * specify namespace of the object for fabric to render it on canvas
+         * A namespace is a string that is used to identify the type of
+         * object.
+         *
+         * Fabric Namespace: http://fabricjs.com/docs/fabric.html
+         */
+        "fabric"
+      );
+    }
+  );
 
   fabricRef.current?.renderAll();
 };
 
 // resize canvas dimensions on window resize
-export const handleResize = ({ canvas }: { canvas: fabric.Canvas | null }) => {
-  const canvasElement = document.getElementById("canvas");
+export const handleResize = ({
+  canvas
+}: {
+  canvas: fabric.Canvas | null;
+}) => {
+  const canvasElement =
+    document.getElementById("canvas");
   if (!canvasElement) return;
 
   if (!canvas) return;
 
   canvas.setDimensions({
     width: canvasElement.clientWidth,
-    height: canvasElement.clientHeight,
+    height: canvasElement.clientHeight
   });
 };
 
 // zoom canvas on mouse scroll
 export const handleCanvasZoom = ({
   options,
-  canvas,
+  canvas
 }: {
   options: fabric.IEvent & { e: WheelEvent };
   canvas: fabric.Canvas;
@@ -411,11 +471,20 @@ export const handleCanvasZoom = ({
   const zoomStep = 0.001;
 
   // calculate zoom based on mouse scroll wheel with min and max zoom
-  zoom = Math.min(Math.max(minZoom, zoom + delta * zoomStep), maxZoom);
+  zoom = Math.min(
+    Math.max(minZoom, zoom + delta * zoomStep),
+    maxZoom
+  );
 
   // set zoom to canvas
   // zoomToPoint: http://fabricjs.com/docs/fabric.Canvas.html#zoomToPoint
-  canvas.zoomToPoint({ x: options.e.offsetX, y: options.e.offsetY }, zoom);
+  canvas.zoomToPoint(
+    {
+      x: options.e.offsetX,
+      y: options.e.offsetY
+    },
+    zoom
+  );
 
   options.e.preventDefault();
   options.e.stopPropagation();

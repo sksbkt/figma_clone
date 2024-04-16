@@ -1,10 +1,15 @@
-import { createClient } from '@liveblocks/client';
-import { createRoomContext, createLiveblocksContext } from '@liveblocks/react';
+import { createClient } from "@liveblocks/client";
+import {
+  createRoomContext,
+  createLiveblocksContext
+} from "@liveblocks/react";
 
 const client = createClient({
-  publicApiKey: process.env.NEXT_PUBLIC_LIVEBLOCKS_PUBLIC_KEY!,
+  publicApiKey:
+    process.env
+      .NEXT_PUBLIC_LIVEBLOCKS_PUBLIC_KEY!,
   // authEndpoint: "/api/liveblocks-auth",
-  throttle: 20,
+  throttle: 20
 });
 
 // Presence represents the properties that exist on every user in the Room
@@ -87,15 +92,19 @@ export const {
     useThreadSubscription,
     useMarkThreadAsRead,
     useRoomNotificationSettings,
-    useUpdateRoomNotificationSettings,
+    useUpdateRoomNotificationSettings
 
     // These hooks can be exported from either context
     // useUser,
     // useRoomInfo
-  },
-} = createRoomContext<Presence, Storage, UserMeta, RoomEvent, ThreadMetadata>(
-  client,
-);
+  }
+} = createRoomContext<
+  Presence,
+  Storage,
+  UserMeta,
+  RoomEvent,
+  ThreadMetadata
+>(client);
 
 // Project-level hooks, use inside `LiveblocksProvider`
 export const {
@@ -108,6 +117,9 @@ export const {
 
     // These hooks can be exported from either context
     useUser,
-    useRoomInfo,
-  },
-} = createLiveblocksContext<UserMeta, ThreadMetadata>(client);
+    useRoomInfo
+  }
+} = createLiveblocksContext<
+  UserMeta,
+  ThreadMetadata
+>(client);

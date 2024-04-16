@@ -6,7 +6,7 @@ const config = {
     "./pages/**/*.{ts,tsx}",
     "./components/**/*.{ts,tsx}",
     "./app/**/*.{ts,tsx}",
-    "./src/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}"
   ],
   prefix: "",
   theme: {
@@ -14,8 +14,8 @@ const config = {
       center: true,
       padding: "2rem",
       screens: {
-        "2xl": "1400px",
-      },
+        "2xl": "1400px"
+      }
     },
     extend: {
       colors: {
@@ -25,27 +25,35 @@ const config = {
           grey: {
             100: "#2B303B",
             200: "#202731",
-            300: "#C4D3ED",
-          },
-        },
+            300: "#C4D3ED"
+          }
+        }
       },
       keyframes: {
         "accordion-down": {
           from: { height: "0" },
-          to: { height: "var(--radix-accordion-content-height)" },
+          to: {
+            height:
+              "var(--radix-accordion-content-height)"
+          }
         },
         "accordion-up": {
-          from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: "0" },
-        },
+          from: {
+            height:
+              "var(--radix-accordion-content-height)"
+          },
+          to: { height: "0" }
+        }
       },
       animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
-      },
-    },
+        "accordion-down":
+          "accordion-down 0.2s ease-out",
+        "accordion-up":
+          "accordion-up 0.2s ease-out"
+      }
+    }
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate")]
 } satisfies Config;
 
 export default config;

@@ -3,12 +3,12 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'liveblocks.io',
-        port: '',
-      },
-    ],
-  },
+        protocol: "https",
+        hostname: "liveblocks.io",
+        port: ""
+      }
+    ]
+  }
 };
 
 export default nextConfig;

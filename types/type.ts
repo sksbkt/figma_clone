@@ -1,11 +1,17 @@
-import { BaseUserMeta, User } from "@liveblocks/client";
-import { Gradient, Pattern } from "fabric/fabric-impl";
+import {
+  BaseUserMeta,
+  User
+} from "@liveblocks/client";
+import {
+  Gradient,
+  Pattern
+} from "fabric/fabric-impl";
 
 export enum CursorMode {
   Hidden,
   Chat,
   ReactionSelector,
-  Reaction,
+  Reaction
 }
 
 export type CursorState =
@@ -64,8 +70,9 @@ export type ActiveElement = {
   icon: string;
 } | null;
 
-export interface CustomFabricObject<T extends fabric.Object>
-  extends fabric.Object {
+export interface CustomFabricObject<
+  T extends fabric.Object
+> extends fabric.Object {
   objectId?: string;
 }
 
@@ -74,25 +81,33 @@ export type ModifyShape = {
   property: string;
   value: any;
   activeObjectRef: React.MutableRefObject<fabric.Object | null>;
-  syncShapeInStorage: (shape: fabric.Object) => void;
+  syncShapeInStorage: (
+    shape: fabric.Object
+  ) => void;
 };
 
 export type ElementDirection = {
   canvas: fabric.Canvas;
   direction: string;
-  syncShapeInStorage: (shape: fabric.Object) => void;
+  syncShapeInStorage: (
+    shape: fabric.Object
+  ) => void;
 };
 
 export type ImageUpload = {
   file: File;
   canvas: React.MutableRefObject<fabric.Canvas>;
   shapeRef: React.MutableRefObject<fabric.Object | null>;
-  syncShapeInStorage: (shape: fabric.Object) => void;
+  syncShapeInStorage: (
+    shape: fabric.Object
+  ) => void;
 };
 
 export type RightSidebarProps = {
   elementAttributes: Attributes;
-  setElementAttributes: React.Dispatch<React.SetStateAction<Attributes>>;
+  setElementAttributes: React.Dispatch<
+    React.SetStateAction<Attributes>
+  >;
   fabricRef: React.RefObject<fabric.Canvas | null>;
   activeObjectRef: React.RefObject<fabric.Object | null>;
   isEditingRef: React.MutableRefObject<boolean>;
@@ -102,8 +117,12 @@ export type RightSidebarProps = {
 export type NavbarProps = {
   activeElement: ActiveElement;
   imageInputRef: React.MutableRefObject<HTMLInputElement | null>;
-  handleImageUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleActiveElement: (element: ActiveElement) => void;
+  handleImageUpload: (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => void;
+  handleActiveElement: (
+    element: ActiveElement
+  ) => void;
 };
 
 export type ShapesMenuProps = {
@@ -138,7 +157,9 @@ export type CanvasMouseMove = {
   isDrawing: React.MutableRefObject<boolean>;
   selectedShapeRef: any;
   shapeRef: any;
-  syncShapeInStorage: (shape: fabric.Object) => void;
+  syncShapeInStorage: (
+    shape: fabric.Object
+  ) => void;
 };
 
 export type CanvasMouseUp = {
@@ -147,29 +168,43 @@ export type CanvasMouseUp = {
   shapeRef: any;
   activeObjectRef: React.MutableRefObject<fabric.Object | null>;
   selectedShapeRef: any;
-  syncShapeInStorage: (shape: fabric.Object) => void;
+  syncShapeInStorage: (
+    shape: fabric.Object
+  ) => void;
   setActiveElement: any;
 };
 
 export type CanvasObjectModified = {
   options: fabric.IEvent;
-  syncShapeInStorage: (shape: fabric.Object) => void;
+  syncShapeInStorage: (
+    shape: fabric.Object
+  ) => void;
 };
 
 export type CanvasPathCreated = {
-  options: (fabric.IEvent & { path: CustomFabricObject<fabric.Path> }) | any;
-  syncShapeInStorage: (shape: fabric.Object) => void;
+  options:
+    | (fabric.IEvent & {
+        path: CustomFabricObject<fabric.Path>;
+      })
+    | any;
+  syncShapeInStorage: (
+    shape: fabric.Object
+  ) => void;
 };
 
 export type CanvasSelectionCreated = {
   options: fabric.IEvent;
   isEditingRef: React.MutableRefObject<boolean>;
-  setElementAttributes: React.Dispatch<React.SetStateAction<Attributes>>;
+  setElementAttributes: React.Dispatch<
+    React.SetStateAction<Attributes>
+  >;
 };
 
 export type CanvasObjectScaling = {
   options: fabric.IEvent;
-  setElementAttributes: React.Dispatch<React.SetStateAction<Attributes>>;
+  setElementAttributes: React.Dispatch<
+    React.SetStateAction<Attributes>
+  >;
 };
 
 export type RenderCanvas = {
@@ -181,12 +216,14 @@ export type RenderCanvas = {
 export type CursorChatProps = {
   cursor: { x: number; y: number };
   cursorState: CursorState;
-  setCursorState: (cursorState: CursorState) => void;
+  setCursorState: (
+    cursorState: CursorState
+  ) => void;
   updateMyPresence: (
     presence: Partial<{
       cursor: { x: number; y: number };
       cursorColor: string;
       message: string;
-    }>,
+    }>
   ) => void;
 };

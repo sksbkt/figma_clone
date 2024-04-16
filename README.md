@@ -41,15 +41,14 @@ This project relies on several key libraries and tools:
 1. Clone the repository:
 2. git clone https://github.com/yourusername/figma_clone.git
 
-2. Navigate to the project directory:
-cd figma_clone
+3. Navigate to the project directory:
+   cd figma_clone
 
-3. Install the dependencies:
-npm install
+4. Install the dependencies:
+   npm install
 
-4. Start the development server:
-npm run dev
-
+5. Start the development server:
+   npm run dev
 
 ## Usage
 
