@@ -7,7 +7,7 @@ import { navElements } from "@/constants";
 import { ActiveElement, NavbarProps } from "@/types/type";
 
 import { Button } from "./ui/button";
-import ShapesMenu from "./new_components/ShapesMenu";
+import ShapesMenu from "./ShapesMenu";
 import ActiveUsers from "./users/ActiveUsers";
 import { NewThread } from "./new_components/comments/NewThread";
 

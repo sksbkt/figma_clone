@@ -1,6 +1,6 @@
 import React from "react";
-
-export const NewThread = ({ children }) => {
+type props = { children: React.ReactNode };
+export const NewThread = ({ children }: props) => {
     return children;
 };
 
