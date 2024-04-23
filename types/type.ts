@@ -6,6 +6,7 @@ import {
   Gradient,
   Pattern
 } from "fabric/fabric-impl";
+import React from "react";
 
 export enum CursorMode {
   Hidden,

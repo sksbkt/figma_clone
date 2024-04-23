@@ -134,7 +134,7 @@ export const handleKeyDown = ({
   // Check if the key pressed is ctrl/cmd + c (copy)
   if (
     (e?.ctrlKey || e?.metaKey) &&
-    e.keyCode === 67
+    e.key === "c"
   ) {
     handleCopy(canvas);
   }

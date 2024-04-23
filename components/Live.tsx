@@ -208,7 +208,7 @@ const Live = ({ canvasRef }: Props) => {
       className="h-[100vh] w-full text-center justify-center items-center flex"
     >
       <canvas ref={canvasRef}
-        className="z-50" />
+        className="z-10" />
       {reaction.map((r) => (
         <FlyingReaction
           key={r.timestamp.toString()}
