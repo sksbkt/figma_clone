@@ -1,11 +1,10 @@
 import Cursor from "@/components/cursor/Cursor";
 import { COLORS } from "@/constants";
-import { LiveCursorProps } from "@/types/type";
+import { useOthers } from "@/liveblocks.config";
 import React from "react";
 
-const LiveCursors = ({
-  others
-}: LiveCursorProps) => {
+const LiveCursors = () => {
+  const others = useOthers();
   return others.map(
     ({ connectionId, presence }) => {
       if (!presence?.cursor) return null;
@@ -18,7 +17,7 @@ const LiveCursors = ({
           color={
             COLORS[connectionId % COLORS.length]
           }
-          message={presence.message}
+          message={presence.message || ''}
         />
       );
     }

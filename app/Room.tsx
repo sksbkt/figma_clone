@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode } from "react";
+import { ReactNode, Suspense } from "react";
 import { RoomProvider } from "../liveblocks.config";
 import { ClientSideSuspense } from "@liveblocks/react";
 import { LiveMap } from "@liveblocks/client";

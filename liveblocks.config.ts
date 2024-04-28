@@ -7,6 +7,7 @@ import {
   createLiveblocksContext
 } from "@liveblocks/react";
 
+import { ReactionEvent } from "@/types/type";
 const client = createClient({
   publicApiKey:
     process.env
@@ -18,9 +19,9 @@ const client = createClient({
 // Presence represents the properties that exist on every user in the Room
 // and that will automatically be kept in sync. Accessible through the
 // `user.presence` property. Must be JSON-serializable.
-type Presence = {
-  // cursor: { x: number, y: number } | null,
-  // ...
+export type Presence = {
+  cursor: { x: number; y: number } | null;
+  message: string | null;
 };
 
 // Optionally, Storage represents the shared document that persists in the
@@ -43,10 +44,7 @@ type UserMeta = {
 
 // Optionally, the type of custom events broadcast and listened to in this
 // room. Use a union for multiple events. Must be JSON-serializable.
-type RoomEvent = {
-  // type: "NOTIFICATION",
-  // ...
-};
+type RoomEvent = ReactionEvent;
 
 // Optionally, when using Comments, ThreadMetadata represents metadata on
 // each thread. Can only contain booleans, strings, and numbers.
@@ -120,9 +118,10 @@ export const {
     useUnreadInboxNotificationsCount,
 
     // These hooks can be exported from either context
-    useUser,
     useRoomInfo
-  }
+  },
+  // * as of now suspense version is returning nothing and need to implement userResolver function
+  useUser
 } = createLiveblocksContext<
   UserMeta,
   ThreadMetadata

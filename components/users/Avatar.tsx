@@ -10,7 +10,6 @@ export function Avatar({
   name: string;
   otherStyles: string;
 }) {
-  console.log("called");
 
   return (
     <div

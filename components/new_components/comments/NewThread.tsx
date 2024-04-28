@@ -15,8 +15,8 @@ import { ComposerSubmitComment } from "@liveblocks/react-comments/primitives";
 import { useCreateThread } from "@/liveblocks.config";
 import { useMaxZIndex } from "@/lib/useMaxZIndex";
 
-import PinnedComposer from "./PinnedComposer";
-import NewThreadCursor from "./NewThreadCursor";
+import PinnedComposer from "../../comments/PinnedComposer";
+import NewThreadCursor from "../../comments/NewThreadCursor";
 
 type ComposerCoords = null | { x: number; y: number };
 
@@ -78,6 +78,7 @@ export const NewThread = ({ children }: Props) => {
         // if click is outside composer, close composer
         if (!isClickOnComposer) {
           setCreatingCommentState("complete");
+
           return;
         }
       }
