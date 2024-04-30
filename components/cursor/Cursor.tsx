@@ -1,4 +1,3 @@
-import CursorChat from "@/components/cursor/CursorChat";
 import CursorSVG from "@/public/assets/CursorSVG";
 
 type Props = {

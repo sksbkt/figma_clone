@@ -92,27 +92,24 @@ const Live = ({ canvasRef, undo, redo }: Props) => {
     }
   }, 100);
 
-  const handlePointerMove = useCallback(
-    (event: React.PointerEvent) => {
-      event.preventDefault();
-      if (
-        cursor == null ||
-        cursorState.mode !==
-        CursorMode.ReactionSelector
-      ) {
-        const x =
-          event.clientX -
-          event.currentTarget.getBoundingClientRect()
-            .x;
-        const y =
-          event.clientY -
-          event.currentTarget.getBoundingClientRect()
-            .y;
-        updateMyPresence({ cursor: { x, y } });
-      }
-    },
-    [cursor, cursorState.mode, updateMyPresence]
-  );
+  const handlePointerMove = useCallback((event: React.PointerEvent) => {
+    event.preventDefault();
+
+    // if cursor is not in reaction selector mode, update the cursor position
+    if (cursor == null || cursorState.mode !== CursorMode.ReactionSelector) {
+      // get the cursor position in the canvas
+      const x = event.clientX - event.currentTarget.getBoundingClientRect().x;
+      const y = event.clientY - event.currentTarget.getBoundingClientRect().y;
+
+      // broadcast the cursor position to other users
+      updateMyPresence({
+        cursor: {
+          x,
+          y,
+        },
+      });
+    }
+  }, []);
 
   const handlePointerDown = useCallback(
     (event: React.PointerEvent) => {
@@ -243,10 +240,12 @@ const Live = ({ canvasRef, undo, redo }: Props) => {
         onPointerDown={handlePointerDown}
         onPointerLeave={handlePointerLeave}
         onPointerUp={handlePointerUp}
-        className="h-[100vh] w-full text-center justify-center items-center flex"
+        className="relative flex h-full w-full flex-1 items-center justify-center"
+        style={{ cursor: cursorState.mode === CursorMode.Chat ? "none" : "auto" }}
       >
         <canvas ref={canvasRef}
         />
+
         {reaction.map((r) => (
           <FlyingReaction
             key={r.timestamp.toString()}
