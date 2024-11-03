@@ -1,6 +1,7 @@
 # Figma Clone
 
 Figma Clone is a web application that allows users to collaborate in real-time on a design canvas, similar to Figma. This project aims to provide a platform for users to work together on design projects, share feedback, and collaborate in real-time.
+
 **[Live Demo](https://figma-clone-quantic.vercel.app/)**
 ## Features
 
