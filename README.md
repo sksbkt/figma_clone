@@ -1,70 +1,126 @@
-# Figma Clone
 
-Figma Clone is a web application that allows users to collaborate in real-time on a design canvas, similar to Figma. This project aims to provide a platform for users to work together on design projects, share feedback, and collaborate in real-time.
+# Figma Clone: Real-Time Collaborative Design Tool
 
-**[Live Demo](https://figma-clone-quantic.vercel.app/)**
-## Features
+A web-based collaborative design application built with Next.js, Liveblocks, and Fabric.js, replicating the core real-time features of Figma.
 
-- Real-time collaboration
-- Design canvas for creating and editing designs
-- Comments and reactions for feedback
-- Support for various design elements and tools
+**Live Demo:** **[https://figma-clone-quantic.vercel.app/](https://figma-clone-quantic.vercel.app/)**
 
-## Technologies
+![Live demo](https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExczJhajZ3ZGlmandhbjVyODUzZ3FsenRhZTg1ZmJvYWd6aG90Z3RkZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/zozwQtYaJAln5GzSlG/giphy.gif)
 
-- **Next.js**: For building the web application.
-- **React**: For building the user interface components.
-- **Tailwind CSS**: For styling the components with utility-first CSS classes.
-- **Liveblocks**: For real-time collaboration features.
-- **Fabric.js**: For handling the canvas and design elements.
-- **UUID**: For generating unique identifiers.
+---
 
-## Dependencies
+ ## Project Overview
 
-This project relies on several key libraries and tools:
+This project is a clone of Figma, built from the ground up to demonstrate advanced skills in real-time web applications, state management, and modern frontend development. The primary goal was to create a functional, multiplayer design tool where users can create, edit, and interact on a shared canvas, with all changes broadcast instantly to everyone in the room.
 
-- **Next.js**: A React framework for building web applications.
-- **React**: A JavaScript library for building user interfaces.
-- **Tailwind CSS**: A utility-first CSS framework for rapidly building custom designs.
-- **Liveblocks**: A real-time collaboration platform.
-- **Fabric.js**: A powerful and flexible open-source JavaScript HTML5 canvas library.
-- **UUID**: A library for generating unique identifiers.
+This application is a perfect showcase of how to build complex, interactive, and stateful applications for the modern web.
 
-## Getting Started
+---
 
-### Prerequisites
+ ## Core Features
 
-- Node.js (version 14 or higher)
-- npm (version 6 or higher)
+* **Real-Time Collaboration:** Multiple users can be on the same canvas and see each other's actions live.
+* **Live Cursors:** See the cursors of other users moving on the screen, complete with their name.
+* **Multiplayer Comments:** Click anywhere on the canvas to drop a comment. Other users can see and reply to comments in real-time.
+* **Live Emoji Reactions:** Send emoji reactions that appear dynamically on the cursors of all users.
+* **Dynamic Shape Tools:** Create rectangles, circles, triangles, and lines.
+* **Freeform Drawing:** A pencil tool for freehand sketching.
+* **Text Tool:** Add and edit text elements directly on the canvas.
+* **Element Manipulation:** Select, move, resize, and change the color and attributes of any element.
+* **Undo/Redo:** Full history management for all canvas actions.
+* **Shareable Workspaces:** A "Share" modal to manage access (UI implemented).
 
-### Installation
+---
 
-1. Clone the repository:
-2. git clone https://github.com/yourusername/figma_clone.git
+## Tech Stack
 
-3. Navigate to the project directory:
-   cd figma_clone
+This project integrates a modern tech stack designed for high-performance, real-time applications.
 
-4. Install the dependencies:
-   npm install
+* **Framework:** **[Next.js 14](https://nextjs.org/)** (using App Router)
+* **Language:** **[TypeScript](https://www.typescriptlang.org/)**
+* **Real-Time Collaboration:** **[Liveblocks](https://liveblocks.io/)**
+    * **Presence:** For live cursors and user presence.
+    * **Room Storage:** For syncing shapes, comments, and reactions.
+    * **Comments:** Used for the built-in comment system.
+* **Canvas API:** **[Fabric.js](http://fabricjs.com/)**
+    * An object-oriented canvas library for creating and manipulating shapes, text, and drawings.
+* **Styling:** **[Tailwind CSS](https://tailwindcss.com/)**
+* **Deployment:** **[Vercel](https://vercel.com/)**
 
-5. Start the development server:
-   npm run dev
+---
 
-## Usage
+## Key Technical Highlights & Challenges
 
-After starting the development server, open your browser and navigate to `http://localhost:3000` to start using the application.
+This section highlights the key technical implementations that make this project a strong portfolio piece.
 
-## Contributing
+### 1. Real-Time State Synchronization
 
-Contributions are welcome! Please read the [contributing guidelines](CONTRIBUTING.md) before getting started.
+The biggest challenge was ensuring that the canvas state is perfectly synchronized across all clients.
 
-## License
+* **Solution:** I used **Liveblocks Room Storage**, which provides conflict-free replicated data types (CRDTs).
+* **Implementation:** The entire canvas, including every shape's position, size, and color, is stored as a Liveblocks `LiveObject`. When one user modifies a shape, the change is broadcast, and all other clients re-render the canvas with the new state. This eliminates the need for a traditional backend database and REST API for canvas objects.
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+### 2. Live Cursors and Presence
 
-## Acknowledgments
+To make the application feel truly "live," I implemented multiplayer cursors.
 
-- [Figma](https://www.figma.com/) for inspiration.
-- [Liveblocks](https://liveblocks.io/) for real-time collaboration features.
-- [Fabric.js](http://fabricjs.com/) for canvas and design elements handling.
+* **Solution:** I used **Liveblocks Presence**, which is designed for ephemeral state.
+* **Implementation:** Each client broadcasts its cursor position (`onpointermove`) and selected emoji reaction to the Liveblocks room. All other clients subscribe to these presence updates and render the cursor and reactions for every other user, creating a seamless, high-performance multiplayer feel.
+
+### 3. Fabric.js Canvas Management
+
+Integrating a complex library like Fabric.js with React and Liveblocks required careful state management.
+
+* **Solution:** I created a React hook (`useCanvas`) that initializes the Fabric.js canvas and subscribes to its events (e.g., `object:modified`, `object:added`).
+* **Implementation:** When a user modifies an object on the canvas, a Fabric.js event is fired. This event triggers a function that updates the **Liveblocks storage**. A separate `useEffect` hook subscribes to changes in the Liveblocks storage and calls Fabric.js methods to render those changes. This creates a one-way data flow: `Fabric Event -> Update Liveblocks Storage -> Other Clients Subscribe -> Render on Fabric Canvas`.
+
+### 4. Dynamic Commenting System
+
+I built a commenting system that allows users to drop a pin anywhere on the canvas.
+
+* **Solution:** I leveraged the **Liveblocks Comments** API.
+* **Implementation:** When a user enters "comment mode," their click event is captured. This event creates a new comment thread tied to the cursor's `(x, y)` coordinates. The comments are rendered as an overlay on top of the main canvas, and Liveblocks handles the real-time creation and display of new comments.
+
+---
+
+## How To Run Locally
+
+You can clone and run this project on your local machine.
+
+1.  **Clone the repository:**
+    ```bash
+    git clone [https://github.com/sksbkt/figma_clone.git](https://github.com/sksbkt/figma_clone.git)
+    cd figma_clone
+    ```
+
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
+
+3.  **Set up Environment Variables:**
+    * You will need to create a free account at [liveblocks.io](https://liveblocks.io/) to get your API keys.
+    * Create a file named `.env.local` in the root of the project.
+    * Add your Liveblocks public and secret keys to this file:
+
+    ```.env.local
+    NEXT_PUBLIC_LIVEBLOCKS_PUBLIC_KEY=pk_dev_YOUR_PUBLIC_KEY
+    LIVEBLOCKS_SECRET_KEY=sk_dev_YOUR_SECRET_KEY
+    ```
+
+4.  **Run the development server:**
+    ```bash
+    npm run dev
+    ```
+
+5.  Open [http://localhost:3000](http://localhost:3000) in your browser. Open a second browser window or tab to see the real-time collaboration in action.
+
+---
+
+## Contact
+
+Created by **[Ali khoshbakht](https://github.com/sksbkt)**
+
+* [**Portfolio** ](https://quanticmachines.netlify.app/)
+* [**LinkedIn**](https://www.linkedin.com/ali-khoshbakht/)
+* [**GitHub**](https://github.com/sksbkt)
