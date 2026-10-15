@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, Suspense } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { RoomProvider } from "../liveblocks.config";
 import { ClientSideSuspense } from "@liveblocks/react";
 import { LiveMap } from "@liveblocks/client";
@@ -11,6 +11,16 @@ export function Room({
 }: {
   children: ReactNode;
 }) {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    return <Loader />;
+  }
+
   return (
     <RoomProvider
       id="my-room"
