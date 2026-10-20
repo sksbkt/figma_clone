@@ -1,0 +1,142 @@
+name: Automated Visual Asset Capture & GIF
+
+on:
+  workflow_dispatch:
+    inputs:
+      commit_assets:
+        description: "Commit generated screenshots & GIF directly into assets/ directory"
+        type: boolean
+        default: true
+        required: false
+      upload_artifacts:
+        description: "Upload assets as a downloadable GitHub Action artifact"
+        type: boolean
+        default: true
+        required: false
+      target_url:
+        description: "Live deployment URL to capture directly without local dev server"
+        type: string
+        default: ""
+        required: false
+      webhook_url:
+        description: "Portfolio base URL for webhook callback (optional if secret is set)"
+        type: string
+        default: ""
+        required: false
+      run_key:
+        description: "Unique dispatch identifier for correlation tracking"
+        type: string
+        default: ""
+        required: false
+  workflow_call:
+    inputs:
+      commit_assets:
+        type: boolean
+        default: true
+      upload_artifacts:
+        type: boolean
+        default: true
+      target_url:
+        type: string
+        default: ""
+      webhook_url:
+        type: string
+        default: ""
+      run_key:
+        type: string
+        default: ""
+
+permissions:
+  contents: write
+
+jobs:
+  capture-visual-assets:
+    name: Run Playwright & Generate GIF
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: ⚙️ Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
+      - name: 📦 Install project dependencies
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci || npm install
+          elif [ -f yarn.lock ]; then
+            npx yarn install --frozen-lockfile || npx yarn install
+          elif [ -f pnpm-lock.yaml ]; then
+            npx pnpm install
+          else
+            npm install
+          fi
+
+      - name: 🎭 Install Playwright & Chromium in CI Runner
+        run: |
+          npm install -D playwright
+          npx playwright install --with-deps chromium
+
+      - name: 🎬 Ensure FFmpeg is available
+        run: |
+          if ! command -v ffmpeg &> /dev/null; then
+            sudo apt-get update && sudo apt-get install -y ffmpeg
+          else
+            echo "FFmpeg ready: $(ffmpeg -version | head -n 1)"
+          fi
+
+      - name: 📸 Execute Automated Visual Capture Script
+        env:
+          TARGET_URL: ${{ inputs.target_url }}
+        run: node scripts/capture-preview.mjs
+
+      - name: 📤 Upload Artifacts
+        if: ${{ inputs.upload_artifacts != false }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-preview-assets
+          path: assets/
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: 🚀 Commit & Push Generated Assets
+        if: ${{ inputs.commit_assets != false }}
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add -f assets/
+          if git diff --staged --quiet; then
+            echo "No changes in assets/ to commit."
+          else
+            git commit -m "chore(assets): capture visual preview screenshots and animated GIF [skip ci]"
+            git push origin HEAD:${{ github.ref_name }}
+            echo "Assets committed and pushed to ${{ github.ref_name }}."
+          fi
+
+      - name: 🔔 Notify Portfolio Webhook
+        if: always()
+        env:
+          WEBHOOK_URL: ${{ secrets.PORTFOLIO_WEBHOOK_URL || inputs.webhook_url }}
+          WEBHOOK_SECRET: ${{ secrets.PORTFOLIO_WEBHOOK_SECRET }}
+        run: |
+          STATUS="${{ job.status == 'success' && 'COMPLETED' || 'FAILED' }}"
+          TARGET_URL="${WEBHOOK_URL}"
+          if [ -z "$TARGET_URL" ]; then
+            echo "No webhook URL configured; skipping notification."
+            exit 0
+          fi
+          echo "Sending webhook notification to $TARGET_URL/api/webhooks/github-assets..."
+          curl -s -X POST "$TARGET_URL/api/webhooks/github-assets"             -H "Content-Type: application/json"             -H "x-webhook-secret: $WEBHOOK_SECRET"             -d '{
+              "projectSlug": "'"${{ github.event.repository.name }}"'",
+              "status": "'"$STATUS"'",
+              "commitSha": "'"${{ github.sha }}"'",
+              "runId": "'"${{ github.run_id }}"'",
+              "runKey": "'"${{ inputs.run_key }}"'"
+            }' || echo "Webhook notification sent or skipped"
